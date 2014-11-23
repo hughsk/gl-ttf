@@ -5,6 +5,7 @@ var createGeometry     = require('gl-geometry');
 var createCamera       = require('orbit-camera');
 var computeNormal      = require('triangle-normal');
 var mat4               = require('gl-matrix-mat4');
+var wireframe          = require('gl-wireframe');
 
 var createFont         = require('../gl-ttf');
 
@@ -63,7 +64,7 @@ function render() {
     letter.geometry.bind(shader);
     shader.uniforms.characterPos = characterPos;
     shader.uniforms.time = now - start;
-    letter.geometry.draw(gl.TRIANGLES);
+    letter.geometry.draw(gl.LINES);
     letter.geometry.bind(shader);
 
     characterPos[0] += letter.glyph.advanceWidth;
@@ -213,7 +214,7 @@ function fontCreated(e, buildCharacter, font) {
       character.geometry = createGeometry(gl)
         .attr('positions', triangles.positions)
         .attr('normals', triangles.normals)
-        .faces(triangles.cells);
+        .faces(wireframe(triangles.cells));
 
       character.extruded = true;
     }
